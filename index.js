@@ -1,17 +1,13 @@
 const express = require("express");
+const mongoose = require("mongoose");
+
 const app = express();
 
-app.use("/static", express.static("public"));
-
-app.use(express.urlencoded({ extended: true }));
-
-//view engine configuration
-app.set("view engine", "ejs");
-
-app.get("/", (req, res) => {
-  res.send("index.ejs");
+// connection to mongodb
+mongoose.connect("mongodb://localhost/todo_express", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-app.set("view engine", "ejs");
-
-app.listen(3000, () => console.log("Server Up and running"));
+// server configurations...
+app.listen(3000, () => console.log("Server started listening on port: 3000"));
