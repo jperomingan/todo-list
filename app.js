@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const passport = require("passport");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const mongoSessionStore = require("connect-mongo");
+const MongoStore = mongoSessionStore(session);
 require("./config/passport");
 
 var app = express();
@@ -23,7 +24,7 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    store: new MongoStore({ mongoUrl: mongoose.connection }),
   })
 );
 // Passport middleware
