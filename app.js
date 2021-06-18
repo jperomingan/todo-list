@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const passport = require("passport");
 const session = require("express-session");
-const mongoSessionStore = require("connect-mongo");
-const MongoStore = mongoSessionStore(session);
+const MongoStore = require("connect-mongo")(session);
 require("./config/passport");
 
 var app = express();
@@ -15,10 +14,15 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+// Passport config
+require("./config/passport")(passport);
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
     secret: "keyboard cat",
